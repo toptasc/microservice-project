@@ -4,13 +4,6 @@
 
   - name: change hostnames
     shell: "hostnamectl set-hostname {{ hostvars[inventory_hostname]['private_dns_name'] }}"
-    # hostwars=magic variable demek.
-
-  - name: swap off
-  # linux'te geçerli olan bir özellik. fiziksel ram yetersiz kalınca swap off ile hdd'den ram kullamıyor gibi yapıyor.
-    shell: |
-      free -m
-      swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
 
   - name: Enable the nodes to see bridged traffic
     shell: |
@@ -37,10 +30,10 @@
 
   - name: update apt-get and install kube packages
     shell: |
-      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - && \
-      echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
+      curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+      echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
       apt-get update -q && \
-      apt-get install -qy kubelet=1.26.3-00 kubectl=1.26.3-00 kubeadm=1.26.3-00 kubernetes-cni docker.io
+      apt-get install -qy kubelet=1.28.2-1.1 kubeadm=1.28.2-1.1 kubectl=1.28.2-1.1 kubernetes-cni docker.io
       apt-mark hold kubelet kubeadm kubectl
 
   - name: Add ubuntu to docker group
