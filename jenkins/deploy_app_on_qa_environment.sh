@@ -20,5 +20,4 @@ AWS_REGION=$AWS_REGION helm upgrade --install \
 # kısaca dosyayı çalıştırdığımızda values-template.yaml dosyası değişmesin values.yaml değişsin istiyoruz. çünkü template altındaki manifesto dosyalarımız değilkenleri values.yaml'dan alacak. 
 # sed -i s/HELM_VERSION/${BUILD_NUMBER} --->> sed komutu ile chart.yaml'ı değiştiriyoruz. yani chart.yaml içinde gördüğün HELM_VERSIon gördüğün yere sed komutu ile ${BUILD_NUMBER} yaz diyoruz. BUILD_NUMBER da jenkins job'tan geliyor. her job çalıştırıldığında farklı bir job numarası alacak. 
 # kubectl create secret generic regcred -n petclinic-qa \ --->> burada regestration credential neden oluşturuyoruz? petclinic-chart/template altındaki manifesto dosyalarının aşağıdaki gibi yaptığım için yani private repodan çektiğim için burada regcred kullanıyorum. public repo oluştursaydım gerek kalmazdı bu bloğu yazmama.
-      imagePullSecrets:
-        - name: regcred
+     
