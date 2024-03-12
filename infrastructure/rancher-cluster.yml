@@ -1,0 +1,28 @@
+nodes:
+  - address: 172.31.32.37             # Change with the Private Ip of rancher server
+    internal_address: 172.31.32.37     # Change with the Private Ip of rancher server
+    user: ubuntu
+    role:
+      - controlplane
+      - etcd
+      - worker
+# tek node olduğu için bir adet node bilgisi girdik. birden fazla olsaydı node sayısı kadar bloğu arttırırdık. 
+# ignore_docker_version: true
+# normailde biz docker'ın uygun bir versionunu yükledik. bu şekilde girseydik RKE kurulumu fail olmuyor. biz yine de garanti olsun diye çalışan bir versionunu yüklediğimiz için yorum satırına aldık. 
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h      # 6 saatte bir snapshot alsın 
+    retention: 24h    # 24 saat saklasın snapshot'ı
+
+ssh_key_path: ~/.ssh/petclinic-rancher.pem
+# jenkins server'dan ssh ile ulaşıyor. 
+
+# Required for external TLS termination with
+# ingress-nginx v0.22+
+ingress:
+  provider: nginx
+  options:
+    use-forwarded-headers: "true"
+# amazonun sertifikasını kullandığımız için http trafiğinin doğru yönlendirmesini sağlamış olduk.
